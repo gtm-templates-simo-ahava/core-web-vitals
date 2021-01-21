@@ -14,8 +14,10 @@ ___INFO___
   "version": 1,
   "securityGroups": [],
   "displayName": "Core Web Vitals",
-  "categories": ["UTILITY"],
-  "__wm": "VGVtcGxhdGUtQXV0aG9yX0NvcmVXZWJWaXRhbHMtU2ltby1BaGF2YQ==",
+  "categories": [
+    "UTILITY"
+  ],
+  "__wm": "VGVtcGxhdGUtQXV0aG9yX0NvcmVXZWJWaXRhbHMtU2ltby1BaGF2YQ\u003d\u003d",
   "brand": {
     "id": "brand_dummy",
     "displayName": "",
@@ -34,7 +36,7 @@ ___TEMPLATE_PARAMETERS___
   {
     "type": "LABEL",
     "name": "Info",
-    "displayName": "This template adds measurement handlers for the three \u003ca href\u003d\"https://web.dev/vitals/\" target\u003d\"_blank\"\u003ecore web vitals\u003c/a\u003e of \u003cstrong\u003eLCP\u003c/strong\u003e (Largest Contentful Paint), \u003cstrong\u003eFID\u003c/strong\u003e (First Input Delay), and \u003cstrong\u003eCLS\u003c/strong\u003e (Cumulative Layout Shift). Once each measurement is collected, it is pushed into \u003cstrong\u003edataLayer\u003c/strong\u003e:\u003cbr/\u003e\u003cbr/\u003ewindow.dataLayer.push({\u003cbr/\u003e\u0026nbsp;\u0026nbsp;event: \u0027coreWebVitals\u0027,\u003cbr/\u003e\u0026nbsp;\u0026nbsp;webVitalsMeasurement: {\u003cbr/\u003e\u0026nbsp;\u0026nbsp;\u0026nbsp;\u0026nbsp;name: \u0027FID\u0027,\u003cbr/\u003e\u0026nbsp;\u0026nbsp;\u0026nbsp;\u0026nbsp;id: \u0027v1-1611219263966-4784306503141\u0027,\u003cbr/\u003e\u0026nbsp;\u0026nbsp;\u0026nbsp;\u0026nbsp;value: 123,\u003cbr/\u003e\u0026nbsp;\u0026nbsp;\u0026nbsp;\u0026nbsp;delta: 123\u003cbr/\u003e\u0026nbsp;\u0026nbsp;}\u003cbr/\u003e});\u003cbr/\u003e\u003cbr/\u003eYou can then create tags, triggers, and variables with this information. Just remember to fire your tag with the \u003ca href\u003d\"https://developers.google.com/analytics/devguides/collection/analyticsjs/sending-hits#specifying_different_transport_mechanisms\"\u003eBeacon API\u003c/a\u003e to ensure measurements collected at page unload are not dropped."
+    "displayName": "This template adds measurement handlers for the three \u003ca href\u003d\"https://web.dev/vitals/\" target\u003d\"_blank\"\u003ecore web vitals\u003c/a\u003e of \u003cstrong\u003eLCP\u003c/strong\u003e (Largest Contentful Paint), \u003cstrong\u003eFID\u003c/strong\u003e (First Input Delay), and \u003cstrong\u003eCLS\u003c/strong\u003e (Cumulative Layout Shift). Once each measurement is collected, it is pushed into \u003cstrong\u003edataLayer\u003c/strong\u003e:\u003cbr/\u003e\u003cbr/\u003ewindow.dataLayer.push({\u003cbr/\u003e\u0026nbsp;\u0026nbsp;event: \u0027coreWebVitals\u0027,\u003cbr/\u003e\u0026nbsp;\u0026nbsp;webVitalsMeasurement: {\u003cbr/\u003e\u0026nbsp;\u0026nbsp;\u0026nbsp;\u0026nbsp;name: \u0027FID\u0027,\u003cbr/\u003e\u0026nbsp;\u0026nbsp;\u0026nbsp;\u0026nbsp;id: \u0027v1-1611219263966-4784306503141\u0027,\u003cbr/\u003e\u0026nbsp;\u0026nbsp;\u0026nbsp;\u0026nbsp;value: 123.234,\u003cbr/\u003e\u0026nbsp;\u0026nbsp;\u0026nbsp;\u0026nbsp;delta: 123.234\u003cbr/\u003e\u0026nbsp;\u0026nbsp;\u0026nbsp;\u0026nbsp;valueRounded: 123,\u003cbr/\u003e\u0026nbsp;\u0026nbsp;\u0026nbsp;\u0026nbsp;deltaRounded: 123\u003cbr/\u003e\u0026nbsp;\u0026nbsp;}\u003cbr/\u003e});\u003cbr/\u003e\u003cbr/\u003eYou can then create tags, triggers, and variables with this information. Just remember to fire your tag with the \u003ca href\u003d\"https://developers.google.com/analytics/devguides/collection/analyticsjs/sending-hits#specifying_different_transport_mechanisms\"\u003eBeacon API\u003c/a\u003e to ensure measurements collected at page unload are not dropped."
   }
 ]
 
@@ -63,10 +65,12 @@ const process = obj => {
     webVitalsMeasurement: {
       name: obj.name,
       id: obj.id,
-      value: Math.round(obj.name === 'CLS' ? obj.value * 1000 : obj.value),
-      delta: Math.round(obj.name === 'CLS' ? obj.delta * 1000 : obj.delta)
+      value: obj.value,
+      delta: obj.delta,
+      valueRounded: Math.round(obj.name === 'CLS' ? obj.value * 1000 : obj.value),
+      deltaRounded: Math.round(obj.name === 'CLS' ? obj.delta * 1000 : obj.delta)
     }
-  }); 
+  });
 };
 
 // Set the handlers
@@ -241,25 +245,29 @@ scenarios:
     \ {\n  return (obj) => {\n    if (obj.webVitalsMeasurement.id === 'LCP') assertThat(obj,\
     \ 'incorrect LCP object pushed to dataLayer').isEqualTo({\n      event: 'coreWebVitals',\n\
     \      webVitalsMeasurement: {\n        id: 'LCP',\n        name: 'LCP',\n   \
-    \     value: 1,\n        delta: 1\n      }\n    });\n    if (obj.webVitalsMeasurement.id\
-    \ === 'FID') assertThat(obj, 'incorrect FID object pushed to dataLayer').isEqualTo({\n\
-    \      event: 'coreWebVitals',\n      webVitalsMeasurement: {\n        id: 'FID',\n\
-    \        name: 'FID',\n        value: 1,\n        delta: 1\n      }\n    });\n\
-    \    if (obj.webVitalsMeasurement.id === 'CLS') assertThat(obj, 'incorrect CLS\
-    \ object pushed to dataLayer').isEqualTo({\n      event: 'coreWebVitals',\n  \
-    \    webVitalsMeasurement: {\n        id: 'CLS',\n        name: 'CLS',\n     \
-    \   value: 1000,\n        delta: 1000\n      }\n    });\n  };\n});\n\nmock('injectScript',\
-    \ (url, onsuccess, onfailure, id) => {\n  success = onsuccess;\n  failure = onfailure;\n\
+    \     value: 1.23,\n        delta: 1.55,\n        valueRounded: 1,\n        deltaRounded:\
+    \ 2\n      }\n    });\n    if (obj.webVitalsMeasurement.id === 'FID') assertThat(obj,\
+    \ 'incorrect FID object pushed to dataLayer').isEqualTo({\n      event: 'coreWebVitals',\n\
+    \      webVitalsMeasurement: {\n        id: 'FID',\n        name: 'FID',\n   \
+    \     value: 1.23,\n        delta: 1.55,\n        valueRounded: 1,\n        deltaRounded:\
+    \ 2\n      }\n    });\n    if (obj.webVitalsMeasurement.id === 'CLS') assertThat(obj,\
+    \ 'incorrect CLS object pushed to dataLayer').isEqualTo({\n      event: 'coreWebVitals',\n\
+    \      webVitalsMeasurement: {\n        id: 'CLS',\n        name: 'CLS',\n   \
+    \     value: 0.00123,\n        delta: 0.00155,\n        valueRounded: 1,\n   \
+    \     deltaRounded: 2\n      }\n    });\n  };\n});\n\nmock('injectScript', (url,\
+    \ onsuccess, onfailure, id) => {\n  success = onsuccess;\n  failure = onfailure;\n\
     \  onsuccess();\n});\n\nmock('copyFromWindow', globalVar => {\n  assertThat(globalVar,\
     \ 'Incorrect global variable loaded from window').isEqualTo('webVitals');\n  return\
     \ {\n    getCLS: (cb) => { milestoneCount++; cb({name: 'CLS', id: 'CLS', value:\
-    \ 1, delta: 1}); },\n    getLCP: (cb) => { milestoneCount++; cb({name: 'LCP',\
-    \ id: 'LCP', value: 1, delta: 1}); },\n    getFID: (cb) => { milestoneCount++;\
-    \ cb({name: 'FID', id: 'FID', value: 1, delta: 1}); }\n  };\n});\n \n// Call runCode\
-    \ to run the template's code.\nrunCode({});\n\n// Verify that the tag finished\
-    \ successfully.\nassertApi('injectScript').wasCalledWith('https://unpkg.com/web-vitals',\
+    \ 0.00123, delta: 0.00155, valueRounded: 1, deltaRounded: 2}); },\n    getLCP:\
+    \ (cb) => { milestoneCount++; cb({name: 'LCP', id: 'LCP', value: 1.23, delta:\
+    \ 1.55, valueRounded: 1, deltaRounded: 2}); },\n    getFID: (cb) => { milestoneCount++;\
+    \ cb({name: 'FID', id: 'FID', value: 1.23, delta: 1.55, valueRounded: 1, deltaRounded:\
+    \ 2}); }\n  };\n});\n \n// Call runCode to run the template's code.\nrunCode({});\n\
+    \n// Verify that the tag finished successfully.\nassertApi('injectScript').wasCalledWith('https://unpkg.com/web-vitals',\
     \ success, failure, 'web-vitals');\nassertThat(milestoneCount, 'webVitals called\
     \ incorrect number of times').isEqualTo(3);\nassertApi('gtmOnSuccess').wasCalled();"
+setup: ''
 
 
 ___NOTES___
