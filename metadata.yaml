@@ -1,0 +1,7 @@
+homepage: "https://www.simoahava.com/"
+documentation: "https://www.simoahava.com/custom-templates/core-web-vitals/"
+versions:
+  # Latest version
+  - sha: bc869721e46569bcb5308e9a1f930938b6ab061b
+    changeNotes: Initial release.
+  # Older versions
