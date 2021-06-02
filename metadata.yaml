@@ -2,9 +2,11 @@ homepage: "https://www.simoahava.com/"
 documentation: "https://www.simoahava.com/custom-templates/core-web-vitals/"
 versions:
   # Latest version
+  - sha: 48dc400fb2d1c65309c677cdceeda3c10d5edb5d
+    changeNotes: Fix potential conflict with requireJS.
+  # Older versions
   - sha: cdf627e8312241c3bcfa7314eb24e49cf380d066
     changeNotes: Add option to namespace measurement in webVitalsMeasurement.
-  # Older version
   - sha: 3ba789af793d38d55f41d6ba48cac1a83390a624
     changeNotes: Add rounded integers to the object for easier implementation.
   - sha: bc869721e46569bcb5308e9a1f930938b6ab061b
