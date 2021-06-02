@@ -114,7 +114,7 @@ const setMilestones = () => {
 };
 
 // Load the library
-injectScript('https://unpkg.com/web-vitals', setMilestones, data.gtmOnFailure, 'web-vitals');
+injectScript('https://unpkg.com/web-vitals/dist/web-vitals.iife.js', setMilestones, data.gtmOnFailure, 'web-vitals');
 
 
 ___WEB_PERMISSIONS___
@@ -252,7 +252,7 @@ ___WEB_PERMISSIONS___
             "listItem": [
               {
                 "type": 1,
-                "string": "https://unpkg.com/web-vitals"
+                "string": "https://unpkg.com/web-vitals/dist/web-vitals.iife.js"
               }
             ]
           }
@@ -294,7 +294,7 @@ scenarios:
     \ 1.55, valueRounded: 1, deltaRounded: 2}); },\n    getFID: (cb) => { milestoneCount++;\
     \ cb({name: 'FID', id: 'FID', value: 1.23, delta: 1.55, valueRounded: 1, deltaRounded:\
     \ 2}); }\n  };\n});\n \n// Call runCode to run the template's code.\nrunCode({});\n\
-    \n// Verify that the tag finished successfully.\nassertApi('injectScript').wasCalledWith('https://unpkg.com/web-vitals',\
+    \n// Verify that the tag finished successfully.\nassertApi('injectScript').wasCalledWith('https://unpkg.com/web-vitals/dist/web-vitals.iife.js',\
     \ success, failure, 'web-vitals');\nassertThat(milestoneCount, 'webVitals called\
     \ incorrect number of times').isEqualTo(3);\nassertApi('gtmOnSuccess').wasCalled();"
 - name: Namespace test
@@ -326,7 +326,7 @@ scenarios:
     \    getFID: (cb) => { milestoneCount++; cb({name: 'FID', id: 'FID', value: 1.23,\
     \ delta: 1.55, valueRounded: 1, deltaRounded: 2}); }\n  };\n});\n \n// Call runCode\
     \ to run the template's code.\nrunCode({namespace: true});\n\n// Verify that the\
-    \ tag finished successfully.\nassertApi('injectScript').wasCalledWith('https://unpkg.com/web-vitals',\
+    \ tag finished successfully.\nassertApi('injectScript').wasCalledWith('https://unpkg.com/web-vitals/dist/web-vitals.iife.js',\
     \ success, failure, 'web-vitals');\nassertThat(milestoneCount, 'webVitals called\
     \ incorrect number of times').isEqualTo(3);\nassertThat(lcpPushed, 'LCP object\
     \ not pushed into dataLayer').isEqualTo(true);\nassertThat(fidPushed, 'FID object\
