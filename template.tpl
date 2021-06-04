@@ -46,6 +46,14 @@ ___TEMPLATE_PARAMETERS___
         "simpleValueType": true,
         "defaultValue": false,
         "help": "If you check this option, then each measurement will be nested under its own property in the webVitalsMeasurement dataLayer object. If you leave this option unchecked, then each measurement will use a shared set of object properties (and thus overwrite previous values)."
+      },
+      {
+        "type": "CHECKBOX",
+        "name": "captureOtherWebVitals",
+        "checkboxText": "Capture Other Web Vitals",
+        "simpleValueType": true,
+        "defaultValue": false,
+        "help": "If you check this option, then Other Web Vitals (https://web.dev/vitals/#other-web-vitals), TTFB and FCP, will also be captured."
       }
     ]
   },
@@ -110,6 +118,10 @@ const setMilestones = () => {
   wv.getFID(process);
   wv.getCLS(process);
   wv.getLCP(process);
+  if (data.captureOtherWebVitals) {
+    wv.getTTFB(process);
+    wv.getFID(process);
+  }
   data.gtmOnSuccess();
 };
 
