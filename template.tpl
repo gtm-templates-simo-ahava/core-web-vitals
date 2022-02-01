@@ -120,7 +120,7 @@ const setMilestones = () => {
   wv.getLCP(process);
   if (data.captureOtherWebVitals) {
     wv.getTTFB(process);
-    wv.getFID(process);
+    wv.getFCP(process);
   }
   data.gtmOnSuccess();
 };
