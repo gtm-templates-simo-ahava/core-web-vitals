@@ -4,7 +4,6 @@ versions:
   # Latest version
   - sha: 87251ca43e4fb664a051c8f447f78549dba63c86
     changeNotes: Add toggle to also collect INP, FCP, and TTFB
-    changeNotes: Fix potential conflict with requireJS.
   - sha: cdf627e8312241c3bcfa7314eb24e49cf380d066
     changeNotes: Add option to namespace measurement in webVitalsMeasurement.
   - sha: 3ba789af793d38d55f41d6ba48cac1a83390a624
