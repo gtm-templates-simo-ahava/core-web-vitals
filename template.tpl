@@ -115,13 +115,13 @@ const process = obj => {
 const setMilestones = () => {
   const wv = copyFromWindow('webVitals');
   if (!wv) return fail('[GTM / Core Web Vitals]: window.webVitals failed to load.');
-  wv.getFID(process);
-  wv.getCLS(process);
-  wv.getLCP(process);
+  wv.onFID(process);
+  wv.onCLS(process);
+  wv.onLCP(process);
   if (data.allMetrics) {
-    wv.getFCP(process);
-    wv.getINP(process);
-    wv.getTTFB(process);
+    wv.onFCP(process);
+    wv.onINP(process);
+    wv.onTTFB(process);
   }
   data.gtmOnSuccess();
 };
@@ -301,10 +301,10 @@ scenarios:
     \ onsuccess, onfailure, id) => {\n  success = onsuccess;\n  failure = onfailure;\n\
     \  onsuccess();\n});\n\nmock('copyFromWindow', globalVar => {\n  assertThat(globalVar,\
     \ 'Incorrect global variable loaded from window').isEqualTo('webVitals');\n  return\
-    \ {\n    getCLS: (cb) => { milestoneCount++; cb({name: 'CLS', id: 'CLS', value:\
-    \ 0.00123, delta: 0.00155, valueRounded: 1, deltaRounded: 2}); },\n    getLCP:\
+    \ {\n    onCLS: (cb) => { milestoneCount++; cb({name: 'CLS', id: 'CLS', value:\
+    \ 0.00123, delta: 0.00155, valueRounded: 1, deltaRounded: 2}); },\n    onLCP:\
     \ (cb) => { milestoneCount++; cb({name: 'LCP', id: 'LCP', value: 1.23, delta:\
-    \ 1.55, valueRounded: 1, deltaRounded: 2}); },\n    getFID: (cb) => { milestoneCount++;\
+    \ 1.55, valueRounded: 1, deltaRounded: 2}); },\n    onFID: (cb) => { milestoneCount++;\
     \ cb({name: 'FID', id: 'FID', value: 1.23, delta: 1.55, valueRounded: 1, deltaRounded:\
     \ 2}); }\n  };\n});\n \n// Call runCode to run the template's code.\nrunCode({});\n\
     \n// Verify that the tag finished successfully.\nassertApi('injectScript').wasCalledWith('https://unpkg.com/web-vitals/dist/web-vitals.iife.js',\
@@ -332,11 +332,11 @@ scenarios:
     });\n\nmock('injectScript', (url, onsuccess, onfailure, id) => {\n  success =\
     \ onsuccess;\n  failure = onfailure;\n  onsuccess();\n});\n\nmock('copyFromWindow',\
     \ globalVar => {\n  assertThat(globalVar, 'Incorrect global variable loaded from\
-    \ window').isEqualTo('webVitals');\n  return {\n    getCLS: (cb) => { milestoneCount++;\
+    \ window').isEqualTo('webVitals');\n  return {\n    onCLS: (cb) => { milestoneCount++;\
     \ cb({name: 'CLS', id: 'CLS', value: 0.00123, delta: 0.00155, valueRounded: 1,\
-    \ deltaRounded: 2}); },\n    getLCP: (cb) => { milestoneCount++; cb({name: 'LCP',\
+    \ deltaRounded: 2}); },\n    onLCP: (cb) => { milestoneCount++; cb({name: 'LCP',\
     \ id: 'LCP', value: 1.23, delta: 1.55, valueRounded: 1, deltaRounded: 2}); },\n\
-    \    getFID: (cb) => { milestoneCount++; cb({name: 'FID', id: 'FID', value: 1.23,\
+    \    onFID: (cb) => { milestoneCount++; cb({name: 'FID', id: 'FID', value: 1.23,\
     \ delta: 1.55, valueRounded: 1, deltaRounded: 2}); }\n  };\n});\n \n// Call runCode\
     \ to run the template's code.\nrunCode({namespace: true});\n\n// Verify that the\
     \ tag finished successfully.\nassertApi('injectScript').wasCalledWith('https://unpkg.com/web-vitals/dist/web-vitals.iife.js',\
@@ -375,15 +375,15 @@ scenarios:
     \nmock('injectScript', (url, onsuccess, onfailure, id) => {\n  success = onsuccess;\n\
     \  failure = onfailure;\n  onsuccess();\n});\n\nmock('copyFromWindow', globalVar\
     \ => {\n  assertThat(globalVar, 'Incorrect global variable loaded from window').isEqualTo('webVitals');\n\
-    \  return {\n    getCLS: (cb) => { milestoneCount++; cb({name: 'CLS', id: 'CLS',\
+    \  return {\n    onCLS: (cb) => { milestoneCount++; cb({name: 'CLS', id: 'CLS',\
     \ value: 0.00123, delta: 0.00155, valueRounded: 1, deltaRounded: 2}); },\n   \
-    \ getLCP: (cb) => { milestoneCount++; cb({name: 'LCP', id: 'LCP', value: 1.23,\
-    \ delta: 1.55, valueRounded: 1, deltaRounded: 2}); },\n    getFID: (cb) => { milestoneCount++;\
+    \ onLCP: (cb) => { milestoneCount++; cb({name: 'LCP', id: 'LCP', value: 1.23,\
+    \ delta: 1.55, valueRounded: 1, deltaRounded: 2}); },\n    onFID: (cb) => { milestoneCount++;\
     \ cb({name: 'FID', id: 'FID', value: 1.23, delta: 1.55, valueRounded: 1, deltaRounded:\
-    \ 2}); },\n    getFCP: (cb) => { milestoneCount++; cb({name: 'FCP', id: 'FCP',\
+    \ 2}); },\n    onFCP: (cb) => { milestoneCount++; cb({name: 'FCP', id: 'FCP',\
     \ value: 123.4, delta: 123.5, valueRounded: 123, deltaRounded: 124}); },\n   \
-    \ getINP: (cb) => { milestoneCount++; cb({name: 'INP', id: 'INP', value: 40, delta:\
-    \ 40, valueRounded: 40, deltaRounded: 40}); },\n    getTTFB: (cb) => { milestoneCount++;\
+    \ onINP: (cb) => { milestoneCount++; cb({name: 'INP', id: 'INP', value: 40, delta:\
+    \ 40, valueRounded: 40, deltaRounded: 40}); },\n    onTTFB: (cb) => { milestoneCount++;\
     \ cb({name: 'TTFB', id: 'TTFB', value: 123.4, delta: 123.5, valueRounded: 123,\
     \ deltaRounded: 124}); }\n  };\n});\n \n// Call runCode to run the template's\
     \ code.\nrunCode({allMetrics: true});\n\n// Verify that the tag finished successfully.\n\
