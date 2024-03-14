@@ -2,6 +2,8 @@ homepage: "https://www.simoahava.com/"
 documentation: "https://www.simoahava.com/custom-templates/core-web-vitals/"
 versions:
   # Latest version
+  - sha: c5ae5b8bd32cf764c65b0099c9ffb6f0a5372b1b
+    changeNotes: Make INP new default metric.
   - sha: 87251ca43e4fb664a051c8f447f78549dba63c86
     changeNotes: Add toggle to also collect INP, FCP, and TTFB
   - sha: cdf627e8312241c3bcfa7314eb24e49cf380d066
