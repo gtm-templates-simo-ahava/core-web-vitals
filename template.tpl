@@ -52,7 +52,7 @@ ___TEMPLATE_PARAMETERS___
         "name": "allMetrics",
         "checkboxText": "Collect all (available) web vitals metrics",
         "simpleValueType": true,
-        "help": "Check this box to collect data for all \u003ca href\u003d\"https://github.com/GoogleChrome/web-vitals#metric\"\u003ecurrently available web vitals metrics\u003c/a\u003e. This includes the Core Web Vitals (FID, CLS, LCP) as well as FCP, INP, and TTFB.",
+        "help": "Check this box to collect data for all \u003ca href\u003d\"https://github.com/GoogleChrome/web-vitals#metric\"\u003ecurrently available web vitals metrics\u003c/a\u003e. This includes the Core Web Vitals (INP, FID, CLS, LCP) as well as FCP and TTFB.",
         "defaultValue": false
       }
     ]
@@ -66,7 +66,7 @@ ___TEMPLATE_PARAMETERS___
       {
         "type": "LABEL",
         "name": "Info",
-        "displayName": "This template adds measurement handlers for the three \u003ca href\u003d\"https://web.dev/vitals/\" target\u003d\"_blank\"\u003ecore web vitals\u003c/a\u003e of \u003cstrong\u003eLCP\u003c/strong\u003e (Largest Contentful Paint), \u003cstrong\u003eFID\u003c/strong\u003e (First Input Delay), and \u003cstrong\u003eCLS\u003c/strong\u003e (Cumulative Layout Shift). See \u003ca href\u003d\"https://www.simoahava.com/custom-templates/core-web-vitals/\" target\u003d\"_blank\"\u003ethis guide\u003c/a\u003e for instructions on how to use this template."
+        "displayName": "This template adds measurement handlers for the three \u003ca href\u003d\"https://web.dev/vitals/\" target\u003d\"_blank\"\u003ecore web vitals\u003c/a\u003e of \u003cstrong\u003eLCP\u003c/strong\u003e (Largest Contentful Paint), \u003cstrong\u003eINP\u003c/strong\u003e (Interaction to Next Paint), and \u003cstrong\u003eCLS\u003c/strong\u003e (Cumulative Layout Shift). \u003cstrong\u003eFID\u003c/strong\u003e (First Input Delay) is kept for backwards compatibility. See \u003ca href\u003d\"https://www.simoahava.com/custom-templates/core-web-vitals/\" target\u003d\"_blank\"\u003ethis guide\u003c/a\u003e for instructions on how to use this template."
       }
     ]
   }
@@ -115,13 +115,13 @@ const process = obj => {
 const setMilestones = () => {
   const wv = copyFromWindow('webVitals');
   if (!wv) return fail('[GTM / Core Web Vitals]: window.webVitals failed to load.');
-  wv.getFID(process);
-  wv.getCLS(process);
-  wv.getLCP(process);
+  wv.onINP(process);
+  wv.onFID(process);
+  wv.onCLS(process);
+  wv.onLCP(process);
   if (data.allMetrics) {
-    wv.getFCP(process);
-    wv.getINP(process);
-    wv.getTTFB(process);
+    wv.onFCP(process);
+    wv.onTTFB(process);
   }
   data.gtmOnSuccess();
 };
