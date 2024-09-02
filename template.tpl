@@ -99,7 +99,9 @@ const process = obj => {
     value: obj.value,
     delta: obj.delta,
     valueRounded: Math.round(obj.name === 'CLS' ? obj.value * 1000 : obj.value),
-    deltaRounded: Math.round(obj.name === 'CLS' ? obj.delta * 1000 : obj.delta)
+    deltaRounded: Math.round(obj.name === 'CLS' ? obj.delta * 1000 : obj.delta),
+    rating: obj.rating,
+    navigationType: obj.navigationType    
   };
   if (data.namespace) {
     // If namespaced, add the measurement under the name of the measurement
@@ -289,11 +291,13 @@ scenarios:
     \ 'incorrect LCP object pushed to dataLayer').isEqualTo({\n      event: 'coreWebVitals',\n\
     \      webVitalsMeasurement: {\n        id: 'LCP',\n        name: 'LCP',\n   \
     \     value: 1.23,\n        delta: 1.55,\n        valueRounded: 1,\n        deltaRounded:\
-    \ 2\n      }\n    });\n    if (obj.webVitalsMeasurement.id === 'FID') assertThat(obj,\
+    \ 2,\n        rating: 'good',\n        navigationType: 'navigate'         \n \
+    \     }\n    });\n    if (obj.webVitalsMeasurement.id === 'FID') assertThat(obj,\
     \ 'incorrect FID object pushed to dataLayer').isEqualTo({\n      event: 'coreWebVitals',\n\
     \      webVitalsMeasurement: {\n        id: 'FID',\n        name: 'FID',\n   \
     \     value: 1.23,\n        delta: 1.55,\n        valueRounded: 1,\n        deltaRounded:\
-    \ 2\n      }\n    });\n    if (obj.webVitalsMeasurement.id === 'CLS') assertThat(obj,\
+    \ 2,\n        rating: 'good',\n        navigationType: 'navigate'         \n \
+    \     }\n    });\n    if (obj.webVitalsMeasurement.id === 'CLS') assertThat(obj,\
     \ 'incorrect CLS object pushed to dataLayer').isEqualTo({\n      event: 'coreWebVitals',\n\
     \      webVitalsMeasurement: {\n        id: 'CLS',\n        name: 'CLS',\n   \
     \     value: 0.00123,\n        delta: 0.00155,\n        valueRounded: 1,\n   \
@@ -376,23 +380,28 @@ scenarios:
     \ 'incorrect LCP object pushed to dataLayer').isEqualTo({\n      event: 'coreWebVitals',\n\
     \      webVitalsMeasurement: {\n        id: 'LCP',\n        name: 'LCP',\n   \
     \     value: 1.23,\n        delta: 1.55,\n        valueRounded: 1,\n        deltaRounded:\
-    \ 2\n      }\n    });\n    if (obj.webVitalsMeasurement.id === 'FID') assertThat(obj,\
+    \ 2,\n        rating: 'good',\n        navigationType: 'navigate'          \n\
+    \      }\n    });\n    if (obj.webVitalsMeasurement.id === 'FID') assertThat(obj,\
     \ 'incorrect FID object pushed to dataLayer').isEqualTo({\n      event: 'coreWebVitals',\n\
     \      webVitalsMeasurement: {\n        id: 'FID',\n        name: 'FID',\n   \
     \     value: 1.23,\n        delta: 1.55,\n        valueRounded: 1,\n        deltaRounded:\
-    \ 2\n      }\n    });\n    if (obj.webVitalsMeasurement.id === 'CLS') assertThat(obj,\
+    \ 2,\n        rating: 'good',\n        navigationType: 'navigate'            \
+    \      \n      }\n    });\n    if (obj.webVitalsMeasurement.id === 'CLS') assertThat(obj,\
     \ 'incorrect CLS object pushed to dataLayer').isEqualTo({\n      event: 'coreWebVitals',\n\
     \      webVitalsMeasurement: {\n        id: 'CLS',\n        name: 'CLS',\n   \
     \     value: 0.00123,\n        delta: 0.00155,\n        valueRounded: 1,\n   \
-    \     deltaRounded: 2\n      }\n    });\n    if (obj.webVitalsMeasurement.id ===\
+    \     deltaRounded: 2,\n        rating: 'good',\n        navigationType: 'navigate'\
+    \                  \n      }\n    });\n    if (obj.webVitalsMeasurement.id ===\
     \ 'FCP') assertThat(obj, 'incorrect FCP object pushed to dataLayer').isEqualTo({\n\
     \      event: 'coreWebVitals',\n      webVitalsMeasurement: {\n        id: 'FCP',\n\
     \        name: 'FCP',\n        value: 123.4,\n        delta: 123.5,\n        valueRounded:\
-    \ 123,\n        deltaRounded: 124\n      }\n    });\n    if (obj.webVitalsMeasurement.id\
+    \ 123,\n        deltaRounded: 124,\n        rating: 'good',\n        navigationType:\
+    \ 'navigate'                  \n      }\n    });\n    if (obj.webVitalsMeasurement.id\
     \ === 'INP') assertThat(obj, 'incorrect INP object pushed to dataLayer').isEqualTo({\n\
     \      event: 'coreWebVitals',\n      webVitalsMeasurement: {\n        id: 'INP',\n\
     \        name: 'INP',\n        value: 40,\n        delta: 40,\n        valueRounded:\
-    \ 40,\n        deltaRounded: 40\n      }\n    });\n    if (obj.webVitalsMeasurement.id\
+    \ 40,\n        deltaRounded: 40,\n        rating: 'good',\n        navigationType:\
+    \ 'navigate'                  \n      }\n    });\n    if (obj.webVitalsMeasurement.id\
     \ === 'TTFB') assertThat(obj, 'incorrect TTFB object pushed to dataLayer').isEqualTo({\n\
     \      event: 'coreWebVitals',\n      webVitalsMeasurement: {\n        id: 'TTFB',\n\
     \        name: 'TTFB',\n        value: 123.4,\n        delta: 123.5,\n       \
