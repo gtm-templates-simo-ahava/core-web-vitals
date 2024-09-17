@@ -102,20 +102,14 @@ const getDebugTarget = (obj) => {
   if (!obj.attribution) {
     return undefined;
   }
-  
-  if (obj.name == 'CLS') {
-    return obj.attribution.largestShiftTarget;
+  switch(obj.name) {
+    case 'CLS':
+      return obj.attribution.largestShiftTarget;
+    case 'INP':
+      return obj.attribution.interactionTarget;
+    case 'LCP':
+      return obj.attribution.element;
   }
-  
-  if (obj.name == 'INP') {
-    return obj.attribution.interactionTarget;
-  }
-  
-  if (obj.name == 'LCP') {
-    return obj.attribution.element;
-  }
-  
-  return undefined;
 };
 
 // Process the web vitals object and push to dataLayer
@@ -164,10 +158,7 @@ const setMilestones = () => {
 };
 
 // Load the library
-let scriptSuffix = '.iife.js';
-if (data.attribution) {
-  scriptSuffix = '.attribution.iife.js';
-}
+const scriptSuffix = data.attribution ? '.attribution.iife.js' : '.iife.js';
 injectScript('https://unpkg.com/web-vitals/dist/web-vitals' + scriptSuffix, setMilestones, data.gtmOnFailure, 'web-vitals');
 
 
