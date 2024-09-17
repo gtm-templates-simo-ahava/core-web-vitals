@@ -2,6 +2,8 @@ homepage: "https://www.simoahava.com/"
 documentation: "https://www.simoahava.com/custom-templates/core-web-vitals/"
 versions:
   # Latest version
+  - sha: 12afb0844ef01013fc71d2ddd5ff077599ba1843
+    changeNotes: Add support for attribution data in dataLayer object
   - sha: c5ae5b8bd32cf764c65b0099c9ffb6f0a5372b1b
     changeNotes: Make INP new default metric.
   - sha: 87251ca43e4fb664a051c8f447f78549dba63c86
