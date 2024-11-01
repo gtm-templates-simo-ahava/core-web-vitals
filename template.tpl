@@ -131,6 +131,7 @@ const process = obj => {
     if (typeof debugTarget !== 'undefined') {
       cwvObj.debugTarget = debugTarget;
     }
+    if (obj.attribution.loadState) cwvObj.loadState = obj.attribution.loadState;
   }
   if (data.namespace) {
     // If namespaced, add the measurement under the name of the measurement
