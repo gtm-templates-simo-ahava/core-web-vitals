@@ -2,6 +2,8 @@ homepage: "https://www.simoahava.com/"
 documentation: "https://www.simoahava.com/custom-templates/core-web-vitals/"
 versions:
   # Latest version
+  - sha: cd47ae093ab51d4f12bed5c7192f7b83354d7a99
+    changeNotes: Add loadState to attribution object.
   - sha: 12afb0844ef01013fc71d2ddd5ff077599ba1843
     changeNotes: Add support for attribution data in dataLayer object
   - sha: c5ae5b8bd32cf764c65b0099c9ffb6f0a5372b1b
