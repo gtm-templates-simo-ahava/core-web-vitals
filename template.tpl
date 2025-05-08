@@ -52,7 +52,7 @@ ___TEMPLATE_PARAMETERS___
         "name": "allMetrics",
         "checkboxText": "Collect all (available) web vitals metrics",
         "simpleValueType": true,
-        "help": "Check this box to collect data for all \u003ca href\u003d\"https://github.com/GoogleChrome/web-vitals#metric\"\u003ecurrently available web vitals metrics\u003c/a\u003e. This includes the Core Web Vitals (INP, FID, CLS, LCP) as well as FCP and TTFB.",
+        "help": "Check this box to collect data for all \u003ca href\u003d\"https://github.com/GoogleChrome/web-vitals#metric\"\u003ecurrently available web vitals metrics\u003c/a\u003e. This includes the Core Web Vitals (INP, CLS, LCP) as well as FCP and TTFB.",
         "defaultValue": false
       },
       {
@@ -74,7 +74,7 @@ ___TEMPLATE_PARAMETERS___
       {
         "type": "LABEL",
         "name": "Info",
-        "displayName": "This template adds measurement handlers for the three \u003ca href\u003d\"https://web.dev/vitals/\" target\u003d\"_blank\"\u003ecore web vitals\u003c/a\u003e of \u003cstrong\u003eLCP\u003c/strong\u003e (Largest Contentful Paint), \u003cstrong\u003eINP\u003c/strong\u003e (Interaction to Next Paint), and \u003cstrong\u003eCLS\u003c/strong\u003e (Cumulative Layout Shift). \u003cstrong\u003eFID\u003c/strong\u003e (First Input Delay) is kept for backwards compatibility. See \u003ca href\u003d\"https://www.simoahava.com/custom-templates/core-web-vitals/\" target\u003d\"_blank\"\u003ethis guide\u003c/a\u003e for instructions on how to use this template."
+        "displayName": "This template adds measurement handlers for the three \u003ca href\u003d\"https://web.dev/vitals/\" target\u003d\"_blank\"\u003ecore web vitals\u003c/a\u003e of \u003cstrong\u003eLCP\u003c/strong\u003e (Largest Contentful Paint), \u003cstrong\u003eINP\u003c/strong\u003e (Interaction to Next Paint), and \u003cstrong\u003eCLS\u003c/strong\u003e (Cumulative Layout Shift). See \u003ca href\u003d\"https://www.simoahava.com/custom-templates/core-web-vitals/\" target\u003d\"_blank\"\u003ethis guide\u003c/a\u003e for instructions on how to use this template."
       }
     ]
   }
@@ -148,7 +148,6 @@ const setMilestones = () => {
   const wv = copyFromWindow('webVitals');
   if (!wv) return fail('[GTM / Core Web Vitals]: window.webVitals failed to load.');
   wv.onINP(process);
-  wv.onFID(process);
   wv.onCLS(process);
   wv.onLCP(process);
   if (data.allMetrics) {
@@ -327,11 +326,6 @@ scenarios:
     \      webVitalsMeasurement: {\n        id: 'LCP',\n        name: 'LCP',\n   \
     \     value: 1.23,\n        delta: 1.55,\n        valueRounded: 1,\n        deltaRounded:\
     \ 2,\n        rating: 'good',\n        navigationType: 'navigate'         \n \
-    \     }\n    });\n    if (obj.webVitalsMeasurement.id === 'FID') assertThat(obj,\
-    \ 'incorrect FID object pushed to dataLayer').isEqualTo({\n      event: 'coreWebVitals',\n\
-    \      webVitalsMeasurement: {\n        id: 'FID',\n        name: 'FID',\n   \
-    \     value: 1.23,\n        delta: 1.55,\n        valueRounded: 1,\n        deltaRounded:\
-    \ 2,\n        rating: 'good',\n        navigationType: 'navigate'         \n \
     \     }\n    });\n    if (obj.webVitalsMeasurement.id === 'CLS') assertThat(obj,\
     \ 'incorrect CLS object pushed to dataLayer').isEqualTo({\n      event: 'coreWebVitals',\n\
     \      webVitalsMeasurement: {\n        id: 'CLS',\n        name: 'CLS',\n   \
@@ -350,15 +344,12 @@ scenarios:
     \ deltaRounded: 2, rating: 'good', navigationType: 'navigate'}); },\n    onLCP:\
     \ (cb) => { milestoneCount++; cb({name: 'LCP', id: 'LCP', value: 1.23, delta:\
     \ 1.55, valueRounded: 1, deltaRounded: 2, rating: 'good', navigationType: 'navigate'});\
-    \ },\n    onFID: (cb) => { milestoneCount++; cb({name: 'FID', id: 'FID', value:\
-    \ 1.23, delta: 1.55, valueRounded: 1, deltaRounded: 2, rating: 'good', navigationType:\
-    \ 'navigate'}); },\n    onINP: (cb) => { milestoneCount++; cb({name: 'INP', id:\
-    \ 'INP', value: 40, delta: 40, valueRounded: 40, deltaRounded: 40, rating: 'good',\
-    \ navigationType: 'navigate'}); }    \n  };\n});\n \n// Call runCode to run the\
-    \ template's code.\nrunCode({});\n\n// Verify that the tag finished successfully.\n\
-    assertApi('injectScript').wasCalledWith('https://unpkg.com/web-vitals/dist/web-vitals.iife.js',\
+    \ },\n    onINP: (cb) => { milestoneCount++; cb({name: 'INP', id: 'INP', value:\
+    \ 40, delta: 40, valueRounded: 40, deltaRounded: 40, rating: 'good', navigationType:\
+    \ 'navigate'}); }    \n  };\n});\n \n// Call runCode to run the template's code.\n\
+    runCode({});\n\n// Verify that the tag finished successfully.\nassertApi('injectScript').wasCalledWith('https://unpkg.com/web-vitals/dist/web-vitals.iife.js',\
     \ success, failure, 'web-vitals');\nassertThat(milestoneCount, 'webVitals called\
-    \ incorrect number of times').isEqualTo(4);\nassertApi('gtmOnSuccess').wasCalled();"
+    \ incorrect number of times').isEqualTo(3);\nassertApi('gtmOnSuccess').wasCalled();"
 - name: Namespace test
   code: "let success, failure;\nlet milestoneCount = 0;\nlet lcpPushed, fidPushed,\
     \ clsPushed, inpPushed;\nmock('createQueue', q => {\n  return (obj) => {\n   \
@@ -368,44 +359,34 @@ scenarios:
     \    name: 'LCP',\n            value: 1.23,\n            delta: 1.55,\n      \
     \      valueRounded: 1,\n            deltaRounded: 2,\n            rating: 'good',\n\
     \            navigationType: 'navigate'             \n          }\n        }\n\
-    \      });\n      lcpPushed = true;\n    }\n    if (obj.webVitalsMeasurement.FID)\
-    \ {\n      assertThat(obj, 'incorrect FID object pushed to dataLayer').isEqualTo({\n\
-    \        event: 'coreWebVitals',\n        webVitalsMeasurement: {\n          FID:\
-    \ {\n            id: 'FID',\n            name: 'FID',\n            value: 1.23,\n\
-    \            delta: 1.55,\n            valueRounded: 1,\n            deltaRounded:\
+    \      });\n      lcpPushed = true;\n    }\n    if (obj.webVitalsMeasurement.CLS)\
+    \ {\n      assertThat(obj, 'incorrect CLS object pushed to dataLayer').isEqualTo({\n\
+    \        event: 'coreWebVitals',\n        webVitalsMeasurement: {\n          CLS:\
+    \ {\n            id: 'CLS',\n            name: 'CLS',\n            value: 0.00123,\n\
+    \            delta: 0.00155,\n            valueRounded: 1,\n            deltaRounded:\
     \ 2,\n            rating: 'good',\n            navigationType: 'navigate'    \
-    \         \n          }\n        }\n      });\n      fidPushed = true;\n    }\n\
-    \    if (obj.webVitalsMeasurement.CLS) {\n      assertThat(obj, 'incorrect CLS\
+    \        \n          }\n        }\n      });\n      clsPushed = true;\n    }\n\
+    \    if (obj.webVitalsMeasurement.INP) {\n      assertThat(obj, 'incorrect INP\
     \ object pushed to dataLayer').isEqualTo({\n        event: 'coreWebVitals',\n\
-    \        webVitalsMeasurement: {\n          CLS: {\n            id: 'CLS',\n \
-    \           name: 'CLS',\n            value: 0.00123,\n            delta: 0.00155,\n\
-    \            valueRounded: 1,\n            deltaRounded: 2,\n            rating:\
-    \ 'good',\n            navigationType: 'navigate'            \n          }\n \
-    \       }\n      });\n      clsPushed = true;\n    }\n    if (obj.webVitalsMeasurement.INP)\
-    \ {\n      assertThat(obj, 'incorrect INP object pushed to dataLayer').isEqualTo({\n\
-    \        event: 'coreWebVitals',\n        webVitalsMeasurement: {\n          INP:\
-    \ {\n            id: 'INP',\n            name: 'INP',\n            value: 40,\n\
-    \            delta: 40,\n            valueRounded: 40,\n            deltaRounded:\
-    \ 40,\n            rating: 'good',\n            navigationType: 'navigate'   \
-    \           \n          }\n        }    \n      });\n      inpPushed = true;\n\
-    \    }\n  };\n});\n\nmock('injectScript', (url, onsuccess, onfailure, id) => {\n\
-    \  success = onsuccess;\n  failure = onfailure;\n  onsuccess();\n});\n\nmock('copyFromWindow',\
-    \ globalVar => {\n  assertThat(globalVar, 'Incorrect global variable loaded from\
-    \ window').isEqualTo('webVitals');\n  return {\n    onCLS: (cb) => { milestoneCount++;\
-    \ cb({name: 'CLS', id: 'CLS', value: 0.00123, delta: 0.00155, valueRounded: 1,\
-    \ deltaRounded: 2, rating: 'good', navigationType: 'navigate'}); },\n    onLCP:\
-    \ (cb) => { milestoneCount++; cb({name: 'LCP', id: 'LCP', value: 1.23, delta:\
-    \ 1.55, valueRounded: 1, deltaRounded: 2, rating: 'good', navigationType: 'navigate'});\
-    \ },\n    onFID: (cb) => { milestoneCount++; cb({name: 'FID', id: 'FID', value:\
-    \ 1.23, delta: 1.55, valueRounded: 1, deltaRounded: 2, rating: 'good', navigationType:\
-    \ 'navigate'}); },\n    onINP: (cb) => { milestoneCount++; cb({name: 'INP', id:\
-    \ 'INP', value: 40, delta: 40, valueRounded: 40, deltaRounded: 40, rating: 'good',\
-    \ navigationType: 'navigate'}); }    \n  };\n});\n \n// Call runCode to run the\
-    \ template's code.\nrunCode({namespace: true});\n\n// Verify that the tag finished\
-    \ successfully.\nassertApi('injectScript').wasCalledWith('https://unpkg.com/web-vitals/dist/web-vitals.iife.js',\
+    \        webVitalsMeasurement: {\n          INP: {\n            id: 'INP',\n \
+    \           name: 'INP',\n            value: 40,\n            delta: 40,\n   \
+    \         valueRounded: 40,\n            deltaRounded: 40,\n            rating:\
+    \ 'good',\n            navigationType: 'navigate'              \n          }\n\
+    \        }    \n      });\n      inpPushed = true;\n    }\n  };\n});\n\nmock('injectScript',\
+    \ (url, onsuccess, onfailure, id) => {\n  success = onsuccess;\n  failure = onfailure;\n\
+    \  onsuccess();\n});\n\nmock('copyFromWindow', globalVar => {\n  assertThat(globalVar,\
+    \ 'Incorrect global variable loaded from window').isEqualTo('webVitals');\n  return\
+    \ {\n    onCLS: (cb) => { milestoneCount++; cb({name: 'CLS', id: 'CLS', value:\
+    \ 0.00123, delta: 0.00155, valueRounded: 1, deltaRounded: 2, rating: 'good', navigationType:\
+    \ 'navigate'}); },\n    onLCP: (cb) => { milestoneCount++; cb({name: 'LCP', id:\
+    \ 'LCP', value: 1.23, delta: 1.55, valueRounded: 1, deltaRounded: 2, rating: 'good',\
+    \ navigationType: 'navigate'}); },\n    onINP: (cb) => { milestoneCount++; cb({name:\
+    \ 'INP', id: 'INP', value: 40, delta: 40, valueRounded: 40, deltaRounded: 40,\
+    \ rating: 'good', navigationType: 'navigate'}); }    \n  };\n});\n \n// Call runCode\
+    \ to run the template's code.\nrunCode({namespace: true});\n\n// Verify that the\
+    \ tag finished successfully.\nassertApi('injectScript').wasCalledWith('https://unpkg.com/web-vitals/dist/web-vitals.iife.js',\
     \ success, failure, 'web-vitals');\nassertThat(milestoneCount, 'webVitals called\
-    \ incorrect number of times').isEqualTo(4);\nassertThat(lcpPushed, 'LCP object\
-    \ not pushed into dataLayer').isEqualTo(true);\nassertThat(fidPushed, 'FID object\
+    \ incorrect number of times').isEqualTo(3);\nassertThat(lcpPushed, 'LCP object\
     \ not pushed into dataLayer').isEqualTo(true);\nassertThat(clsPushed, 'CLS object\
     \ not pushed into dataLayer').isEqualTo(true);\nassertThat(inpPushed, 'INP object\
     \ not pushed into dataLayer').isEqualTo(true);\nassertApi('gtmOnSuccess').wasCalled();"
@@ -416,12 +397,7 @@ scenarios:
     \      webVitalsMeasurement: {\n        id: 'LCP',\n        name: 'LCP',\n   \
     \     value: 1.23,\n        delta: 1.55,\n        valueRounded: 1,\n        deltaRounded:\
     \ 2,\n        rating: 'good',\n        navigationType: 'navigate'          \n\
-    \      }\n    });\n    if (obj.webVitalsMeasurement.id === 'FID') assertThat(obj,\
-    \ 'incorrect FID object pushed to dataLayer').isEqualTo({\n      event: 'coreWebVitals',\n\
-    \      webVitalsMeasurement: {\n        id: 'FID',\n        name: 'FID',\n   \
-    \     value: 1.23,\n        delta: 1.55,\n        valueRounded: 1,\n        deltaRounded:\
-    \ 2,\n        rating: 'good',\n        navigationType: 'navigate'            \
-    \      \n      }\n    });\n    if (obj.webVitalsMeasurement.id === 'CLS') assertThat(obj,\
+    \      }\n    });\n    if (obj.webVitalsMeasurement.id === 'CLS') assertThat(obj,\
     \ 'incorrect CLS object pushed to dataLayer').isEqualTo({\n      event: 'coreWebVitals',\n\
     \      webVitalsMeasurement: {\n        id: 'CLS',\n        name: 'CLS',\n   \
     \     value: 0.00123,\n        delta: 0.00155,\n        valueRounded: 1,\n   \
@@ -450,19 +426,17 @@ scenarios:
     \ deltaRounded: 2, rating: 'good', navigationType: 'navigate'}); },\n    onLCP:\
     \ (cb) => { milestoneCount++; cb({name: 'LCP', id: 'LCP', value: 1.23, delta:\
     \ 1.55, valueRounded: 1, deltaRounded: 2, rating: 'good', navigationType: 'navigate'});\
-    \ },\n    onFID: (cb) => { milestoneCount++; cb({name: 'FID', id: 'FID', value:\
-    \ 1.23, delta: 1.55, valueRounded: 1, deltaRounded: 2, rating: 'good', navigationType:\
-    \ 'navigate'}); },\n    onFCP: (cb) => { milestoneCount++; cb({name: 'FCP', id:\
-    \ 'FCP', value: 123.4, delta: 123.5, valueRounded: 123, deltaRounded: 124, rating:\
-    \ 'good', navigationType: 'navigate'}); },\n    onINP: (cb) => { milestoneCount++;\
-    \ cb({name: 'INP', id: 'INP', value: 40, delta: 40, valueRounded: 40, deltaRounded:\
-    \ 40, rating: 'good', navigationType: 'navigate'}); },\n    onTTFB: (cb) => {\
-    \ milestoneCount++; cb({name: 'TTFB', id: 'TTFB', value: 123.4, delta: 123.5,\
-    \ valueRounded: 123, deltaRounded: 124, rating: 'good', navigationType: 'navigate'});\
-    \ }\n  };\n});\n \n// Call runCode to run the template's code.\nrunCode({allMetrics:\
-    \ true});\n\n// Verify that the tag finished successfully.\nassertApi('injectScript').wasCalledWith('https://unpkg.com/web-vitals/dist/web-vitals.iife.js',\
+    \ },\n    onFCP: (cb) => { milestoneCount++; cb({name: 'FCP', id: 'FCP', value:\
+    \ 123.4, delta: 123.5, valueRounded: 123, deltaRounded: 124, rating: 'good', navigationType:\
+    \ 'navigate'}); },\n    onINP: (cb) => { milestoneCount++; cb({name: 'INP', id:\
+    \ 'INP', value: 40, delta: 40, valueRounded: 40, deltaRounded: 40, rating: 'good',\
+    \ navigationType: 'navigate'}); },\n    onTTFB: (cb) => { milestoneCount++; cb({name:\
+    \ 'TTFB', id: 'TTFB', value: 123.4, delta: 123.5, valueRounded: 123, deltaRounded:\
+    \ 124, rating: 'good', navigationType: 'navigate'}); }\n  };\n});\n \n// Call\
+    \ runCode to run the template's code.\nrunCode({allMetrics: true});\n\n// Verify\
+    \ that the tag finished successfully.\nassertApi('injectScript').wasCalledWith('https://unpkg.com/web-vitals/dist/web-vitals.iife.js',\
     \ success, failure, 'web-vitals');\nassertThat(milestoneCount, 'webVitals called\
-    \ incorrect number of times').isEqualTo(6);\nassertApi('gtmOnSuccess').wasCalled();"
+    \ incorrect number of times').isEqualTo(5);\nassertApi('gtmOnSuccess').wasCalled();"
 - name: Attribution test
   code: "let success, failure;\nlet milestoneCount = 0;\nmock('createQueue', q =>\
     \ {\n  return (obj) => {\n    if (obj.webVitalsMeasurement.id === 'LCP') assertThat(obj,\
@@ -471,12 +445,7 @@ scenarios:
     \     value: 1.23,\n        delta: 1.55,\n        valueRounded: 1,\n        deltaRounded:\
     \ 2,\n        rating: 'good',\n        navigationType: 'navigate',\n        debugTarget:\
     \ '.mycss_lcp'        \n      }\n    });\n    if (obj.webVitalsMeasurement.id\
-    \ === 'FID') assertThat(obj, 'incorrect FID object pushed to dataLayer').isEqualTo({\n\
-    \      event: 'coreWebVitals',\n      webVitalsMeasurement: {\n        id: 'FID',\n\
-    \        name: 'FID',\n        value: 1.23,\n        delta: 1.55,\n        valueRounded:\
-    \ 1,\n        deltaRounded: 2,\n        rating: 'good',\n        navigationType:\
-    \ 'navigate'        \n      }\n    });\n    if (obj.webVitalsMeasurement.id ===\
-    \ 'CLS') assertThat(obj, 'incorrect CLS object pushed to dataLayer').isEqualTo({\n\
+    \ === 'CLS') assertThat(obj, 'incorrect CLS object pushed to dataLayer').isEqualTo({\n\
     \      event: 'coreWebVitals',\n      webVitalsMeasurement: {\n        id: 'CLS',\n\
     \        name: 'CLS',\n        value: 0.00123,\n        delta: 0.00155,\n    \
     \    valueRounded: 1,\n        deltaRounded: 2,\n        rating: 'good',\n   \
@@ -495,16 +464,14 @@ scenarios:
     \ 'navigate', attribution: {largestShiftTarget: '.mycss_cls'}}); },\n    onLCP:\
     \ (cb) => { milestoneCount++; cb({name: 'LCP', id: 'LCP', value: 1.23, delta:\
     \ 1.55, valueRounded: 1, deltaRounded: 2, rating: 'good', navigationType: 'navigate',\
-    \ attribution: {element: '.mycss_lcp'}}); },\n    onFID: (cb) => { milestoneCount++;\
-    \ cb({name: 'FID', id: 'FID', value: 1.23, delta: 1.55, valueRounded: 1, deltaRounded:\
-    \ 2, rating: 'good', navigationType: 'navigate'}); },\n    onINP: (cb) => { milestoneCount++;\
+    \ attribution: {element: '.mycss_lcp'}}); },\n    onINP: (cb) => { milestoneCount++;\
     \ cb({name: 'INP', id: 'INP', value: 40, delta: 40, valueRounded: 40, deltaRounded:\
     \ 40, rating: 'good', navigationType: 'navigate', attribution: {interactionTarget:\
     \ '.mycss_inp'}}); }    \n  };\n});\n \n// Call runCode to run the template's\
     \ code.\nrunCode({attribution: true});\n\n// Verify that the tag finished successfully.\n\
     assertApi('injectScript').wasCalledWith('https://unpkg.com/web-vitals/dist/web-vitals.attribution.iife.js',\
     \ success, failure, 'web-vitals');\nassertThat(milestoneCount, 'webVitals called\
-    \ incorrect number of times').isEqualTo(4);\nassertApi('gtmOnSuccess').wasCalled();"
+    \ incorrect number of times').isEqualTo(3);\nassertApi('gtmOnSuccess').wasCalled();"
 setup: ''
 
 
