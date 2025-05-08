@@ -2,6 +2,8 @@ homepage: "https://www.simoahava.com/"
 documentation: "https://www.simoahava.com/custom-templates/core-web-vitals/"
 versions:
   # Latest version
+  - sha: 89f0e2d1d9ec4689469ba54f4059e89dbc71a4b4
+    changeNotes: Remove FID support due to web-vitals version bump to 5.0.0.
   - sha: cd47ae093ab51d4f12bed5c7192f7b83354d7a99
     changeNotes: Add loadState to attribution object.
   - sha: 12afb0844ef01013fc71d2ddd5ff077599ba1843
