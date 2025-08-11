@@ -111,7 +111,7 @@ const getDebugTarget = (obj) => {
     case 'INP':
       return obj.attribution.interactionTarget;
     case 'LCP':
-      return obj.attribution.element;
+      return obj.attribution.target;
   }
 };
 
